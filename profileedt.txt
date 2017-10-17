@@ -1,0 +1,120 @@
+$findhuser = "Select * from mystore.customer_home where username = '$username'";
+		$homeuser = $conn->query($findhuser);
+			
+		$findbuser = "Select * from mystore.customer_biz where username = '$username'";
+		$bizuser = $conn->query($findbuser);
+		
+		$ziphome = "Select zip as z, city as c, state as s from mystore.zip z, mystore.customer_home h where username = $username and h.zip=z.zip";
+		$ziph = $conn->query($ziphome);
+		
+		$zipbiz = "Select city as c, state as s from mystore.zip z, mystore.customer_business b where username = $username and h.zip=z.zip";
+		$zipb = $conn->query($zipbiz);
+		
+		if($homeuser->num_rows>0){
+			while($row = $homeuser->fetch_assoc()){
+				echo '<form  class="form-signin" name="queryInput" action="createacc_handle.php" method="POST">
+					<h2 class="form-signin-heading">Create an Account</h2>
+					<label for="username" class="sr-only">Username</label>
+					<input type="text" name="username" class="form-control" maxlength="15" placeholder="'.$row['username'].'" required>
+				<br/>	
+        <label for="password" class="sr-only">Password</label>
+        <input type="password" name="password" class="form-control" maxlength="15" placeholder="password" required>
+				
+		<label for="firstname" class="sr-only">First Name</label>
+        <input type="other" name="firstname" class="form-control" maxlength="15" placeholder="'.$row["name"].'" required>
+				
+		<label for="email" class="sr-only">Email</label>
+        <input type="email" name="email" class="form-control" maxlength="30" placeholder="'.$row['email'].'" required>
+				
+		<label for="street" class="sr-only">Street Address</label>
+        <input type="other" name="street" class="form-control" maxlength="30" placeholder="'.$row['addline'].'" required>
+		
+		<label for="city" class="sr-only">City</label>
+        <input type="other" name="city" class="form-control" maxlength="30" placeholder="'.$ziph->fetch_object()->c.'" required>
+		
+		<label for="state" class="sr-only">State</label>
+        <input type="other" name="state" class="form-control" maxlength="2" placeholder="'.$ziph->fetch_object()->s.'" required>
+		
+		<label for="zip" class="sr-only">Zip</label>
+        <input type="number" name="zip" class="form-control" maxlength="5" placeholder="'.$row['zip'].'" required>
+		
+		    <select class="form-control form-control-sm" name="gender">
+                 <option value="Select">gender</option>
+                 <option value="male">Male</option>
+                 <option value="female">Female</option>
+				 <option value="private">Private</option>
+             </select>
+			 <br/>
+             <select class="form-control form-control-sm" name="marriage">
+                 <option value="">marriage status</option>
+                 <option value="single">Single</option>
+                 <option value="married">Married</option>
+				 <option value="single">Divorced</option>
+             </select>
+			 <br/>
+		<label for="age" class="sr-only">Age</label>
+        <input type="number" name="age" class="form-control" maxlength="3" placeholder="'.$row['age'].'" required>	 
+				 
+		<label for="income" class="sr-only">Income</label>
+        <input type="number" name="income" class="form-control" min="15" max="150" maxlength="8" placeholder="'.$row['income'].'" required>
+		
+        <div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+		</div></form>';
+		
+		
+			}
+		}
+		
+		else if ($bizuser->num_rows>0){
+			while($row = $bizuser->fetch_assoc()){
+			echo '<form  class="form-signin" name="queryInput" action="createaccbiz_handle.php" method="POST">
+	<h2 class="form-signin-heading">Create a Business Account</h2>
+	  <label for="username" class="sr-only">Username</label>
+        <input type="text" name="username" class="form-control" maxlength="15" placeholder="'.$row['username'].'" required>
+			<br/>	
+        <label for="password" class="sr-only">Password</label>
+        <input type="password" name="password" class="form-control" maxlength="15" placeholder="password (private)" required>
+				
+		<label for="bizname" class="sr-only">Business Name</label>
+        <input type="other" name="bizname" class="form-control" maxlength="20" placeholder="'.$row['bizname'].'" required>
+		
+		<label for="email" class="sr-only">Email</label>
+        <input type="email" name="email" class="form-control" maxlength="30" placeholder="'.$row['email'].'" required>
+		
+		<label for="street" class="sr-only">Street Address</label>
+        <input type="other" name="street" class="form-control" maxlength="30" placeholder="'.$row['addline'].'" required>
+		
+		<label for="city" class="sr-only">City</label>
+        <input type="other" name="city" class="form-control" maxlength="30" placeholder="'.$ziph->fetch_object()->c.'" required>
+		
+		<label for="state" class="sr-only">State</label>
+        <input type="other" name="state" class="form-control" maxlength="2" placeholder="'.$ziph->fetch_object()->s.'" required>
+		
+		<label for="zip" class="sr-only">Zip</label>
+        <input pattern=".{5,}" type="number" name="zip" id="zip"  class="form-control" maxlength="5" placeholder="'.$row['zip'].'" required>
+		
+		    <select class="form-control form-control-sm" name="category">
+                 <option value="Select">category</option>
+                 <option value="market">market</option>
+                 <option value="restaurant">restaurant</option>
+				 <option value="IT">IT</option>
+				 <option value="finance">finance</option>
+				 <option value="education">education</option>
+				 <option value="non-profit">non-profit</option>
+				 <option value="other">other</option>
+             </select>
+			 					 
+		<label for="income" class="sr-only">yrprofits</label>
+        <input type="number" name="yrprofits" class="form-control" placeholder="'.$row['income'].'" required>
+		
+        <div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+		</div>
+	 
+	 </form>';
+	 
+
+			
+			
+		}
