@@ -1,0 +1,113 @@
+/**************************************QUERY2***************************************/
+        $items2 = Query2();        
+        
+            $categoryArray=array();
+            $dataseries1=array();
+            $dataseries2=array();
+            $dataseries3=array();
+            $dataseries4=array();
+            $dataseries5=array();
+            
+            $t = 7;
+            for($i=0; $i<$t;$i++) {
+                $ctrl = 0; 
+                // collecting year as horizontal label
+                    array_push($categoryArray, array(
+                      "label" => $items2[$i]["date"]
+                    )
+                ); 
+                    // collecting data for 5 stores 
+                    array_push($dataseries1, array(
+                    "value" => $items2[$i]["SUM"]
+                    )
+                );  $ctrl+=1;
+                   array_push($dataseries2, array(
+                    "value" => $items2[$i+$ctrl*$t]["SUM"]
+                    )
+                );  $ctrl+=1;
+                   array_push($dataseries3, array(
+                    "value" => $items2[$i+$ctrl*$t]["SUM"]
+                    )
+                );  $ctrl+=1;
+                   array_push($dataseries4, array(
+                    "value" => $items2[$i+$ctrl*$t]["SUM"]
+                    )
+                );  $ctrl+=1;
+                   array_push($dataseries5, array(
+                    "value" => $items2[$i+$ctrl*$t]["SUM"]
+                    )
+                );                   
+            }
+            
+            
+            $arrData2 = array(
+            "chart" => array(
+                "caption"=> "Comparison of Stores",
+                "xAxisname"=> "Year",
+                "yAxisName"=> "Total Number of Sales",
+                "numbersuffix"=> "%",
+                "showvalues"=>"0",
+                "anchorRadius"=> "6",
+                "anchorBorderThickness"=> "2",
+                "bgcolor"=>"#89C3C4",
+                "canvasbgcolor"=>"#A0CBC2",                
+                "showPlotBorder"=>"1", 
+                "baseFont"=> "Open Sans",
+                "theme" => "fint"
+                )
+            );
+
+            $arrData2["categories"]=array(array("category"=>$categoryArray));
+                    // creating dataset object
+            $arrData2["dataset"] = array(
+                array("seriesName"=> "Store1", "data"=>$dataseries1),
+                array("seriesName"=> "Store2", "data"=>$dataseries2),
+                array("seriesName"=> "Store3", "data"=>$dataseries3),
+                array("seriesName"=> "Store4", "data"=>$dataseries4),
+                array("seriesName"=> "Store5", "renderAs"=>"line", "data"=>$dataseries5));
+
+            $jsonEncodedData2 = json_encode($arrData2);
+                    // chart object
+            $msChart2 = new FusionCharts("msline","stores_chart" , "100%", "400", "chart-container2", "json", $jsonEncodedData2);
+             $msChart2->render("chart-container2");   
+       
+?>
+      <div id="chart-container2"> hi </div>      
+  <?php       
+     
+
+        /**************************************QUERY1***************************************/
+              
+        $items1 = Query1();
+         $arrData =array(
+            "chart" =>array(
+                "caption"=> "Ratio of Customers",
+                "subCaption"=> "by April 2017",
+                "numberPrefix"=> "$",
+                "showPercentInTooltip"=> "0",
+                "decimals"=> "1",
+                "useDataPlotColorForLabels"=> "1",
+                "theme"=> "fint")
+                     );                  
+     
+	 $actualData = array(
+                "HOME" => $items1[0]['home'],
+                "BUSINESS" => $items1[1]['business']                                
+            );
+            $arrData['data'] = array();
+            // Iterate through the data in `$actualData` and insert in to the `$arrData` array.
+            foreach ($actualData as $key => $value) {
+                array_push($arrData['data'],
+                    array(
+                        'label' => $key,
+                        'value' => $value
+                    )
+                );
+            }            
+
+        $jsonEncodedData = json_encode($arrData);
+        // chart object
+        $msChart = new FusionCharts("pie2D", "ratio", "100%", "400", "chart-container1", "json", $jsonEncodedData);
+        $msChart->render("");
+        
+        ?> 
